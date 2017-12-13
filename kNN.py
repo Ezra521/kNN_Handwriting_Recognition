@@ -4,6 +4,7 @@ Created on Dec 13, 2017
 kNN: k Nearest Neighbors
 @author: Ezra
 @email:zgahwuqiankun@qq.com
+其实就是判断预测的数据和训练的数据哪几个欧式距离最近，就判定手写体是那个数字
 """
 import  numpy as np
 import operator
@@ -39,12 +40,12 @@ def img2vector(filename):
 
 def handwritingClassTest():
     hwLabels = []
-    trainingFileList = listdir('./dataSet/trainingDigits')           #load the training set
+    trainingFileList = listdir('./dataSet/trainingDigits')           #载入训练数据
     m = len(trainingFileList)
     trainingMat = np.zeros((m,1024))
     for i in range(m):
         fileNameStr = trainingFileList[i]
-        fileStr = fileNameStr.split('.')[0]     #take off .txt
+        fileStr = fileNameStr.split('.')[0]     #去掉后缀.txt
         classNumStr = int(fileStr.split('_')[0])
         hwLabels.append(classNumStr)
         trainingMat[i,:] = img2vector('./dataSet/trainingDigits/%s' % fileNameStr)
@@ -53,13 +54,13 @@ def handwritingClassTest():
     mTest = len(testFileList)
     for i in range(mTest):
         fileNameStr = testFileList[i]
-        fileStr = fileNameStr.split('.')[0]     #take off .txt
+        fileStr = fileNameStr.split('.')[0]     #去掉.txt
         classNumStr = int(fileStr.split('_')[0])
         vectorUnderTest = img2vector('./dataSet/testDigits/%s' % fileNameStr)
         classifierResult = classify0(vectorUnderTest, trainingMat, hwLabels, 3)
-        print("the classifier came back with: %d, the real answer is: %d" % (classifierResult, classNumStr))
+        print("分类器分类结果是: %d, 正确的结果是: %d" % (classifierResult, classNumStr))
         if (classifierResult != classNumStr): errorCount += 1.0
-    print("\nthe total number of errors is: %d" % errorCount)
-    print("\nthe total error rate is: %f" % (errorCount/float(mTest)))
+    print("\n总共判断错误的数据是: %d" % errorCount)
+    print("\n总共的错误率是: %f" % (errorCount/float(mTest)))
 
 handwritingClassTest()
